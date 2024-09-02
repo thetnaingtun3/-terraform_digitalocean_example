@@ -10,3 +10,4 @@ git clone https://github.com/thetnaingtun3/terraform_nodejs_test.git app
 cd app
 npm install
 pm2 start index.js
+tail -f /var/log/cloud-init-output.log
