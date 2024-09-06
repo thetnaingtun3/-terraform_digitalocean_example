@@ -16,8 +16,31 @@ Export your DigitalOcean API token as an environment variable:
 
 ```sh
 export DIGITALOCEAN_TOKEN="your_digitalocean_token"
+```
 
+### Copy Local Device's SSH Key into Files
+
+```sh
+cp ~/.ssh/id_rsa.pub files
+```
+
+```sh
 terraform init 
+```
+
+```sh
 terraform fmt 
+```
+
+```sh
 terraform plan
+```
+
+```sh
 terraform apply
+```
+
+```sh
+ tail -f /var/log/cloud-init-output.log
+```
+
