@@ -6,54 +6,36 @@ terraform {
     }
   }
 }
-resource "digitalocean_ssh_key" "web" {
-  name       = "web app SSH key"
-  public_key = file("${path.module}/files/id_rsa.pub")
 
+
+resource "digitalocean_ssh_key" "web" {
+  name       = "Terraform Testing"
+  public_key = file("${path.module}/user_file/id_rsa.pub")
 }
 
-
-# Create a new Web Droplet in the nyc2 region
 resource "digitalocean_droplet" "web" {
-  # count = 1
-  image = "ubuntu-24-04-x64"
-  name  = "testing"
-  # name       = "testing-${count.index}"
-  region = "sgp1"
-  # size       = "s-1vcpu-1gb"
-  size       = "s-2vcpu-4gb"
+  image  = "ubuntu-20-04-x64"
+  name   = "testing"
+  region = "lon1"
+  size   = "s-1vcpu-1gb"
   monitoring = true
   ssh_keys = [
-    digitalocean_ssh_key.web.id
+    digitalocean_ssh_key.web.id,
   ]
-  user_data = file("${path.module}/files/user-data.sh")
-  # user_data = <<-EOF
-  #             #!/bin/bash
-  #             apt-get update
-  #             apt-get install -y nginx
-  #             systemctl start nginx
-  #             systemctl enable nginx
-  #             curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-  #             apt-get install -y nodejs
 
-  #             $(cat ${path.module}/files/user-data.sh")
-  #             EOF 
-
+user_data =  file("${path.module}/user_file/index.sh")
 }
 
-
+# Create a new domain
 resource "digitalocean_domain" "domain" {
-  name = "thetnainghtun.me"
-
+  name       = "thetnainghtun.me"
 }
 
+
+# Add an A record to the domain for www.example.com.
 resource "digitalocean_record" "main" {
   domain = digitalocean_domain.domain.name
   type   = "A"
   name   = "@"
   value  = digitalocean_droplet.web.ipv4_address
 }
-
-# what is next 
-
-
